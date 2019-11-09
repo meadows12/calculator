@@ -28,4 +28,5 @@
     <string name="tan1">tan</string>
     <string name="division">/</string>
     <string name="info_">TextView</string>
+    <string name="del">DEL</string>
 </resources>

@@ -23,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
     private Button but8;
     private Button but9;
     private Button clear;
+    private Button delete;
     //private Button addition;
     //private Button sub;
     //private Button mult;
@@ -31,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     private String display = "";
     private String currentOperator = " ";
     private String result = "";
+
 
 
     @Override
@@ -48,7 +50,6 @@ public class MainActivity extends AppCompatActivity {
                 if(result!="")
                 {
                     display = "";
-
                     result = "";
                     screen.setText(display);
                 }
@@ -235,30 +236,20 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                if(!getResult()) return;
+                /*if(!getResult()) return;
 
                 String _result = String.valueOf(result);
 
-                screen.setText(display + "\n" + _result);
+                screen.setText(display + "\n" + _result);*/
+                String[] operation = display.split(Pattern.quote(currentOperator));
+                if(operation.length<1) return;
+                result= String.valueOf(eval(operation[0],operation[1],currentOperator));
+                screen.setText(display + "\n" + result);
+
 
             }
         });
-
-
-
     }
-
-    private boolean isOperator(char op) {
-
-        if (op == '+' || op == '-' || op == '*' || op == '/')
-        {
-            return true;
-        }
-        else
-            return false;
-
-    }
-
 
     public void onClickOperator( View v){
         Button b = (Button) v;
@@ -266,63 +257,40 @@ public class MainActivity extends AppCompatActivity {
             display = result;
             result = "";
         }
-
-        /*if(currentOperator!= "")
-        {
-            if(isOperator(display.charAt(display.length()-1))){
-
-                display.replace(display.charAt(display.length()-1),b.getText().charAt(0));
-
-            }
-
-            else{
-                 getResult();
-                 display = result;
-                 result = "";
-            }
-
-            currentOperator = b.getText().toString();
-        }*/
-
-
-
-
-
         display+=b.getText();
         currentOperator =b.getText().toString();
         screen.setText(display);
 
     }
 
-    private boolean getResult(){
+    public void OnClickDele(View v)
+    {
 
-        String[] operation = display.split(Pattern.quote(currentOperator));
-
-        if(operation.length<2) return false;
-
-        if(currentOperator == "+" || currentOperator == "-" || currentOperator == "*" || currentOperator == "/"){
-            result= String.valueOf(eval(operation[0],operation[1],currentOperator));
-            return true;
-
+        String text = screen.getText().toString();
+        if(screen.length() == 1){
+            screen.setText(null);
+            display = "";
+            result = " ";
         }
         else
         {
-
-            result = String.valueOf(eval1(operation[0],currentOperator));
-            return true;
+            screen.setText(text.substring(0,text.length()-1));
+            display = screen.getText().toString();
         }
-
-
 
     }
 
-    private double eval(String a,String b,String op)
+
+    private double eval(String a ,String b,String op)
     {
         switch(op)
         {
             case "+": return Double.valueOf(a)+ Double.valueOf(b);
             case "-":return Double.valueOf(a)- Double.valueOf(b);
             case "*":return Double.valueOf(a)* Double.valueOf(b);
+            case "Sin":return Math.sin(Double.parseDouble(b));
+            case "cos":return Math.cos(Double.parseDouble(b));
+            case "tan":return Math.tan(Double.parseDouble(b));
             case "/":try{return Double.valueOf(a)/ Double.valueOf(b);}
             catch (Exception e){
                 Log.d("Claculator",e.getMessage());
@@ -331,21 +299,16 @@ public class MainActivity extends AppCompatActivity {
 
         }
     }
-    private double eval1(String a,String op)
+   /* private double eval1(String a,String op)
     {
-        Double b = Double.valueOf(a);
+        Double b = Double.parseDouble(a);
         switch(op)
         {
-            case "SIN": return Math.sin(b);
-            case "COS":return Math.cos(b);
+            case "Sin": return Math.sin(b);
+            case "cos":return Math.cos(b);
             default:return -1;
         }
-    }
-
-
-
-
-
+    }*/
 
     public void getId(){
 
@@ -365,7 +328,7 @@ public class MainActivity extends AppCompatActivity {
         //mult=  findViewById(R.id.multiply);
         res =  findViewById(R.id.eq);
         screen = findViewById(R.id.info);
-
+        delete = findViewById(R.id.del);
 
     }
 
